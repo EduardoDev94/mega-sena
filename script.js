@@ -18,13 +18,17 @@ function createBoard() {
     }
 }
 function render (){
+    renderBoard()
+    renderButtons()
 
 }
 function newGame(){
     resetGame()
 }
 function handleNumberClick(event) {
-    var value = event.currentTarget.currentNumber
+    var value = event.currentTarget.textContent
+    console.log (value)
+   
     if (isNumberInGame(value)){
         removeNumberFromGame(value)
     }else{
@@ -48,7 +52,22 @@ function renderBoard(){
     divBoard.appendChild(ulNumbers)
 
 }
+function renderButtons (){
+    var divButtons = document.querySelector('#megasena-buttons')
+    divButtons.innerHTML = ''
+    var buttonNewGame = createNewGameButton()
+    divButtons.appendChild(buttonNewGame)
 
+}
+function createNewGameButton (){
+    var button = document.createElement('button')
+    button.textContent = 'Novo Jogo'
+    button.addEventListener ('click', newGame)
+    return button
+}
+function renderSavedGames (){
+
+}
 
 function addNumberToGame(numberToAdd){
     if (numberToAdd < 1 || numberToAdd > 60){
@@ -96,5 +115,6 @@ function resetGame (){
 }
 
 start()
+render()
 
 
