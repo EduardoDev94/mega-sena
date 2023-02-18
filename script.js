@@ -35,17 +35,25 @@ function handleNumberClick(event) {
         addNumberToGame(value)
     }
   console.log(state.currentGame)
+  render()
+
 }
 function renderBoard(){
     var divBoard = document.querySelector ('#megasena-numbers')
     divBoard.innerHTML = '';
     var ulNumbers = document.createElement('ul')
+    ulNumbers.classList.add('numbers')
     for (var i=0; i < state.board.length; i++){
        
         var currentNumber = state.board[i] 
-        var liNumber = document.createElement('li')        
+        var liNumber = document.createElement('li')   
+        liNumber.classList.add('number')     
         liNumber.textContent = currentNumber
         liNumber.addEventListener ('click', handleNumberClick)
+       
+        if(isNumberInGame(currentNumber)){
+        liNumber.classList.add('selected-number')
+    }
         ulNumbers.appendChild(liNumber)   
 
     }
@@ -56,10 +64,28 @@ function renderButtons (){
     var divButtons = document.querySelector('#megasena-buttons')
     divButtons.innerHTML = ''
     var buttonNewGame = createNewGameButton()
+    var buttonRandomGame = createRandomGameButton()
+    var buttonSaveGame = createSaveGameButton()
     divButtons.appendChild(buttonNewGame)
+    divButtons.appendChild(buttonRandomGame)
+    divButtons.appendChild(buttonSaveGame)
 
 }
-function createNewGameButton (){
+function createSaveGameButton(){
+            var button = document.createElement('button')
+    button.textContent = 'Salvar Jogo'
+    button.addEventListener ('click', saveGame)
+    return button
+}
+
+function createRandomGameButton(){
+        var button = document.createElement('button')
+    button.textContent = 'Jogo Aleatório'
+    button.addEventListener ('click', randomGame)
+    return button
+} 
+
+function createNewGameButton(){
     var button = document.createElement('button')
     button.textContent = 'Novo Jogo'
     button.addEventListener ('click', newGame)
@@ -98,6 +124,8 @@ function saveGame (){
         return
     }
     state.savedGames.push(state.currentGame)
+    newGame()
+    console.log(state.savedGames)
 }
 
 function isNumberInGame (numberToCheck){
@@ -112,6 +140,17 @@ function isGameComplete (){
 
 function resetGame (){
     state.currentGame = []
+}
+
+function randomGame() {
+    resetGame()
+   
+   while(!isGameComplete()){
+       var randomNumber =  Math.ceil(Math.random() * 60)
+       addNumberToGame(randomNumber)
+     }
+   console.log(state.currentGame)
+
 }
 
 start()
